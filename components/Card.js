@@ -14,8 +14,8 @@ import minhaLista from '../lista/listaEventos';
 export const Card = ({navigation}) => {
 
   const buttonHandle = () => {
-    Linking.openURL('https://davisbalbino.github.io/Cadastro/')
-    .catch((err) => console.error('Erro ao abrir a página web:', err));
+    navigation.navigate('cadastro')
+
   };
     
     const [inputEmail, setInputEmail] = useState('')
@@ -38,8 +38,14 @@ export const Card = ({navigation}) => {
                   
                   return record.get('n').properties;
               });
+              if(user!=''){
                 listaConexao.push(user)
                 navigation.navigate('telaPrincipal')
+              }
+              else{
+                alert("Erro nas Credenciais, tente novamente")
+              }
+                
 
               })
               .catch((error) => {

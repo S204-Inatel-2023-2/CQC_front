@@ -10,6 +10,7 @@ import { TelaPrincipal } from "./components/TelaPrincipal";
 import { Conexoes } from "./components/Conexoes";
 import { Salvos } from "./components/Salvos";
 import { CriarEvento } from "./components/CriarEvento";
+import { Cadastro } from "./components/Cadastro";
 
 
 const Stack = createStackNavigator();
@@ -23,6 +24,7 @@ function App(){
         <Stack.Screen options={{ headerShown: false }} name='conexoes' component={Conexoes} />
         <Stack.Screen options={{ headerShown: false }} name='salvos' component={Salvos} />
         <Stack.Screen options={{ headerShown: false }} name='criarEvento' component={CriarEvento} />
+        <Stack.Screen options={{ headerShown: false }} name='cadastro' component={Cadastro} />
       </Stack.Navigator>
     </NavigationContainer>
       

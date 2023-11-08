@@ -61,11 +61,12 @@ export const CriarEvento = ({navigation}) =>{
       const query = "CREATE(:evento {nome: $nome, local: $local, data: $data})"
         session
               .run(query, { nome: inputTitulo,local: inputLocal,data: String(value) })
-              .then((result) => {
+              .then((result) => { 
+                const mensagem = "cadastrado com sucesso"
                 
                 Alert.alert(
                   'Título do Alerta',
-                  String(result),
+                  String(mensagem),
                   [
                     { text: 'OK', onPress: () => console.log('OK Pressionado') },
                   ]
