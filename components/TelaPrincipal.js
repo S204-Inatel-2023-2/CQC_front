@@ -33,6 +33,21 @@ export const TelaPrincipal = ({navigation}) =>{
   ];
   
   const isFocused = useIsFocused();
+  const AWS = require('aws-sdk');
+  const s3 = new AWS.S3({
+    accessKeyId: 'AKIAVZUW77U3GWGTPEYA',
+    secretAccessKey: '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',
+    region: 'us-east-1',
+  });
+  
+  // Nome do bucket onde você deseja enviar a imagem
+  const bucketName = 'armazenamentoneoj4imagens';
+  
+  // Nome do arquivo e o corpo da imagem que você quer enviar
+  
+  
+  // Parâmetros para o upload
+  
 
   useEffect(() => {
     if (isFocused) {
@@ -43,9 +58,8 @@ export const TelaPrincipal = ({navigation}) =>{
 
   const  minhaFuncao = () => {
     const neo4j = require('neo4j-driver')
-    const driver = neo4j.driver('bolt://54.89.223.127:7687', neo4j.auth.basic('neo4j', 'runways-locomotives-shock'))
-     
-     const session = driver.session();
+    const driver = neo4j.driver('bolt://3.238.39.27:7687', neo4j.auth.basic('neo4j', 'alleys-calibers-openings'))      
+    const session = driver.session();
      const query = "MATCH (n:evento) RETURN n "
        session
              .run(query)
@@ -57,8 +71,8 @@ export const TelaPrincipal = ({navigation}) =>{
               
               eventosJsons = (events)
               console.log(listaConexao)
+              setCarregarComponente(true)
               
-              setCarregarComponente(true);
             })
              .catch((error) => {
                Alert.alert(
@@ -99,7 +113,7 @@ export const TelaPrincipal = ({navigation}) =>{
         {carregarComponente ? (
           
           eventosJsons.map(event => (
-            <Evento imagem={'https://picsum.photos/200/30'} nome = {event.nome} ></Evento>
+            <Evento imagem={'https://picsum.photos/200/30'} nome = {event.nome} carregar = {true}></Evento>
           ))
         ) : (
           <Text>Carregando...</Text>

@@ -27,8 +27,7 @@ export const Card = ({navigation}) => {
 
     const buttonLoginHandle = async() =>{
       const neo4j = require('neo4j-driver')
-      const driver = neo4j.driver('bolt://54.89.223.127:7687', neo4j.auth.basic('neo4j', 'runways-locomotives-shock'))
-      
+      const driver = neo4j.driver('bolt://3.238.39.27:7687', neo4j.auth.basic('neo4j', 'alleys-calibers-openings'))      
       const session = driver.session();
       const query = 'MATCH (n:Usuario) WHERE n.email = $email AND n.senha = $senha RETURN n;';
         session
@@ -39,7 +38,9 @@ export const Card = ({navigation}) => {
                   return record.get('n').properties;
               });
               if(user!=''){
+                listaConexao.pop()
                 listaConexao.push(user)
+                console.log(listaConexao)
                 navigation.navigate('telaPrincipal')
               }
               else{
@@ -84,7 +85,7 @@ export const Card = ({navigation}) => {
                   <Text style={styles.text}>Senha:</Text>
                   <View style={styles.container1}>
                     <FontAwesomeIcon icon={faLock} />
-                    <TextInput value={inputSenha} onChangeText={(text)=>setInputSenha(text)} style={styles.input} placeholder='Digite sua senha'></TextInput>
+                    <TextInput secureTextEntry={true} value={inputSenha} onChangeText={(text)=>setInputSenha(text)} style={styles.input} placeholder='Digite sua senha'></TextInput>
                   </View>
 
                 

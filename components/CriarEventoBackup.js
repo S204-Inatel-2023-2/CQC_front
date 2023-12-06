@@ -40,7 +40,7 @@ export const CriarEvento = ({navigation}) =>{
   
   // Nome do arquivo e o corpo da imagem que você quer enviar
   const fileName = 'teste.png'; // Substitua com o nome da sua imagem
-  const fileContent = 'components\images\OIP.jpeg'; // Substitua com o conteúdo da sua imagem em formato de buffer ou arquivo
+  const fileContent = image; // Substitua com o conteúdo da sua imagem em formato de buffer ou arquivo
   
   // Parâmetros para o upload
   const params = {
@@ -102,45 +102,44 @@ export const CriarEvento = ({navigation}) =>{
       const query = "CREATE(:evento {nome: $nome, local: $local, data: $data, imagem: $link})"
     let imagemLink =''
 
-    s3.upload(params, (err, data) => {
-      if (err) {
-        console.error('Erro ao enviar a imagem:', err);
-      } else {
-        console.log('Imagem enviada com sucesso. URL:', data.Location);
-        imagemLink = data.Location
-        session
-              .run(query, { nome: inputTitulo,local: inputLocal,data: String(value), link:data.Location })
-              .then((result) => { 
-                const mensagem = "cadastrado com sucesso"
+    // s3.upload(params, (err, data) => {
+    //   if (err) {
+    //     console.error('Erro ao enviar a imagem:', err);
+    //   } else {
+    //     console.log('Imagem enviada com sucesso. URL:', data.Location);
+    //     imagemLink = data.Location
+    //     session
+    //           .run(query, { nome: inputTitulo,local: inputLocal,data: String(value), link:data.Location })
+    //           .then((result) => { 
+    //             const mensagem = "cadastrado com sucesso"
                 
-                Alert.alert(
-                  'Título do Alerta',
-                  String(mensagem),
-                  [
-                    { text: 'OK', onPress: () => console.log('OK Pressionado') },
-                  ]
-                );
+    //             Alert.alert(
+    //               'Título do Alerta',
+    //               String(mensagem),
+    //               [
+    //                 { text: 'OK', onPress: () => console.log('OK Pressionado') },
+    //               ]
+    //             );
                 
-              })
-              .catch((error) => {
-                Alert.alert(
-                  'Título do Alerta',
-                  String(error),
-                  [
-                    { text: 'OK', onPress: () => console.log('OK Pressionado') },
-                  ]
-                );
-              })
-              .finally(() => {
-                setImage(null);
-                session.close();
-                driver.close();
+    //           })
+    //           .catch((error) => {
+    //             Alert.alert(
+    //               'Título do Alerta',
+    //               String(error),
+    //               [
+    //                 { text: 'OK', onPress: () => console.log('OK Pressionado') },
+    //               ]
+    //             );
+    //           })
+    //           .finally(() => {
+    //             session.close();
+    //             driver.close();
                
-              });
-      }
-    });
-     sleep(2000); 
-     console.log('link: '+imagemLink)
+    //           });
+    //   }
+    // });
+    //  sleep(2000); 
+    //  console.log('link: '+imagemLink)
    
     
         

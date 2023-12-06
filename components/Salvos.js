@@ -1,33 +1,75 @@
-import react from "react";
-import { Text, StyleSheet,View, ScrollView,TouchableOpacity} from "react-native"
+import react, { useEffect } from "react";
+import { Text, StyleSheet,View, ScrollView,TouchableOpacity, Alert} from "react-native"
 import React,{useState} from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faMap} from '@fortawesome/free-solid-svg-icons/faMap'
 import { faUsers} from '@fortawesome/free-solid-svg-icons/faUsers'
 import { faBookmark} from '@fortawesome/free-solid-svg-icons/faBookmark'
 import { faPlus} from '@fortawesome/free-solid-svg-icons/faPlus'
-
+import { useIsFocused } from '@react-navigation/native';
 
 
 import { LinearGradient, } from 'expo-linear-gradient';
 import  '@react-navigation/native';
 import { Evento } from "./Evento";
-import minhaLista from "../lista/listaEventos";
+import listaConexao from "../lista/listaConexao";
+
 
 
 
 export const Salvos = ({navigation}) =>{
 
+
+
+  const [carregarComponente, setCarregarComponente] = useState(false);
   var images_src = [
     "https://picsum.photos/200/300",
-    "https://picsum.photos/200/300",
-    "https://picsum.photos/200/300",
-    "https://picsum.photos/200/300",
-    "https://picsum.photos/200/300",
-    "https://picsum.photos/200/300",
-    "https://picsum.photos/200/300"
   ];
+  let eventosJson = [
+    { nome: 'João', sobrenome: 'Silva', email: 'joao@example.com' },
+    { nome: 'Maria', sobrenome: 'Santos', email: 'maria@example.com' },
+    { nome: 'Pedro', sobrenome: 'Rocha', email: 'pedro@example.com' },
+    // Adicione mais pessoas conforme necessário
+  ];
+  
+  const isFocused = useIsFocused();
 
+  useEffect(() => {
+    if (isFocused) {
+      // Chame sua função aqui
+      minhaFuncao();
+    }
+  }, [isFocused]);
+
+  const  minhaFuncao = () => {
+    const neo4j = require('neo4j-driver')
+    const driver = neo4j.driver('bolt://3.238.39.27:7687', neo4j.auth.basic('neo4j', 'alleys-calibers-openings'))      
+    const session = driver.session();
+     const query = "MATCH (u:Usuario {email: $email})-[:PARTICIPA]->(n:evento) RETURN n"
+       session
+             .run(query,{ email: listaConexao[0][0]['email']})
+             .then(result => {
+                const events = result.records.map(record => {
+                  
+                  return record.get('n').properties;
+              });
+              
+              eventosJsons = (events)
+              console.log(listaConexao)
+              
+              setCarregarComponente(true);
+            })
+             .catch((error) => {
+              
+             })
+             .finally(() => {
+               session.close();
+               driver.close();
+              
+             });
+  };
+  
+  
     return(
 
         
@@ -38,19 +80,23 @@ export const Salvos = ({navigation}) =>{
         <View style={styles.tituloContainer}>
         <FontAwesomeIcon icon={faMap} size={40}/>
 
-          <Text style={styles.titulo}>Eventos Salvos</Text>
+          <Text style={styles.titulo}>Salvos</Text>
           
         </View>
      
 
       {/* Conteúdo rolável */}
       <ScrollView style={{ flex: 1 }}>
-
         {/* Seu conteúdo aqui */}
-        {images_src.map(imagens => (
-          <Evento imagem = {imagens}/>
-        ))}
        
+        {carregarComponente ? (
+          
+          eventosJsons.map(event => (
+            <Evento imagem={'https://picsum.photos/200/30'} nome = {event.nome} carregar = {false} ></Evento>
+          ))
+        ) : (
+          <Text>Carregando...</Text>
+        )}
        
       </ScrollView>
 
@@ -65,7 +111,7 @@ export const Salvos = ({navigation}) =>{
             <FontAwesomeIcon icon={faUsers} size={40} />
         </TouchableOpacity>
 
-        <TouchableOpacity >
+        <TouchableOpacity onPress={()=> navigation.navigate('salvos')}>
             <FontAwesomeIcon icon={faBookmark} size={40} />
         </TouchableOpacity>
         <TouchableOpacity onPress={()=> navigation.navigate('criarEvento')}>

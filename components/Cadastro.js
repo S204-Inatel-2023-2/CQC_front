@@ -26,8 +26,7 @@ export const Cadastro = ({navigation}) => {
 
     const buttonHandle = async() =>{
       const neo4j = require('neo4j-driver')
-      const driver = neo4j.driver('bolt://54.89.223.127:7687', neo4j.auth.basic('neo4j', 'runways-locomotives-shock'))
-      
+      const driver = neo4j.driver('bolt://3.238.39.27:7687', neo4j.auth.basic('neo4j', 'alleys-calibers-openings'))      
       const session = driver.session();
       const query = 'Create (n:Usuario {nome: $nome, sobrenome: $sobrenome, email: $email, senha: $senha})';
         session
@@ -77,13 +76,13 @@ export const Cadastro = ({navigation}) => {
                   <Text style={styles.text}>E-mail:</Text>
                   <View style={styles.container1}>
                     <FontAwesomeIcon icon={faUser} />
-                    <TextInput value={inputEmail} onChangeText={(text)=>setInputEmail(text)} style={styles.input} placeholder='Digite seu e-mail'></TextInput>
+                    <TextInput value={inputEmail} keyboardType="email-address" onChangeText={(text)=>setInputEmail(text)} style={styles.input} placeholder='Digite seu e-mail'></TextInput>
                   </View>
 
                   <Text style={styles.text}>Senha:</Text>
                   <View style={styles.container1}>
                     <FontAwesomeIcon icon={faLock} />
-                    <TextInput value={inputSenha} onChangeText={(text)=>setInputSenha(text)} style={styles.input} placeholder='Digite sua senha'></TextInput>
+                    <TextInput secureTextEntry={true} value={inputSenha} onChangeText={(text)=>setInputSenha(text)} style={styles.input} placeholder='Digite sua senha'></TextInput>
                   </View>
 
                 

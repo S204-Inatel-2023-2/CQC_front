@@ -18,7 +18,49 @@ import { faBookmark} from '@fortawesome/free-solid-svg-icons/faBookmark'
 export const Pessoa = (props) => {
 
     const imagem = {uri: props.imagem}
+    const showEvents = () =>{
       
+      const neo4j = require('neo4j-driver')
+      const driver = neo4j.driver('bolt://3.238.39.27:7687', neo4j.auth.basic('neo4j', 'alleys-calibers-openings'))      
+      const session = driver.session();
+      const query = "MATCH(u:Usuario {email: $email})-[:PARTICIPA]->(n:evento) return n"
+      session
+              .run(query, { email: props.email })
+              .then((result) => { 
+                const users = result.records.map(record => {
+                  
+                  return record.get('n').properties;
+              })
+               let mensagem = ''
+                console.log(users)
+                for(let i = 0; i< users.length; i++){
+                  mensagem = mensagem + users[i]['nome']+'\n'
+                }
+                Alert.alert(
+                  'Eventos que irei Participar',
+                  String(mensagem),
+                  [
+                    { text: 'OK', onPress: () => console.log('OK Pressionado') },
+                  ]
+                );
+                
+              })
+              .catch((error) => {
+                Alert.alert(
+                  'Título do Alerta',
+                  String(error),
+                  [
+                    { text: 'OK', onPress: () => console.log('OK Pressionado') },
+                  ]
+                );
+              })
+              .finally(() => {
+             
+                session.close();
+                driver.close();
+               
+              });
+    }
 
   return(
     
@@ -32,19 +74,15 @@ export const Pessoa = (props) => {
         
 
         <LinearGradient colors={['#FFF0','#FFF']} style={styles.container2}>
-            <Text>{props.nome}</Text>
+            <Text style={styles.nomeTitulo}>{props.nome} {props.sobrenome}</Text>
             <View style={styles.menu}>
       
-              <TouchableOpacity >
-                        <FontAwesomeIcon icon={faMap} size={40} />
-                </TouchableOpacity>
+              
                 
-                <TouchableOpacity >
-                    <FontAwesomeIcon icon={faUsers} size={40} />
-                </TouchableOpacity>
+                
 
-                <TouchableOpacity >
-                    <FontAwesomeIcon icon={faBookmark} size={40} />
+                <TouchableOpacity onPress={showEvents} >
+                    <FontAwesomeIcon  icon={faBookmark} size={40} />
                 </TouchableOpacity>
             </View>
 
@@ -62,6 +100,10 @@ export const Pessoa = (props) => {
 }
 
 const styles = StyleSheet.create({
+  nomeTitulo:{
+    marginLeft:30,
+    fontSize:20,
+  },
   container:{
     borderWidth:1,
     borderRadius:50  ,
